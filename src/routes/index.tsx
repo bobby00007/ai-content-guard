@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
+import { useRef, useState, type ChangeEvent, type CSSProperties, type DragEvent } from "react";
 import {
   ArrowRight,
   Check,
@@ -336,7 +336,7 @@ function Results({ result, mode, copied, onCopy }: { result: DetectionResult; mo
   const human = 100 - result.score;
   return <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
     <div className="flex items-start justify-between gap-4"><div><p className="section-kicker">Analysis complete</p><h3 className="mt-2 text-2xl font-semibold">{result.verdict}</h3></div><Button variant="outline" size="icon" onClick={onCopy} aria-label="Copy result">{copied ? <Check /> : <Clipboard />}</Button></div>
-    <div className="mt-7 grid grid-cols-[128px_1fr] items-center gap-6"><div className="score-ring" style={{ "--score": `${result.score * 3.6}deg` } as React.CSSProperties}><div><strong>{result.score}%</strong><span>AI likelihood</span></div></div><div><span className="inline-flex bg-ink px-2 py-1 font-mono text-xs text-ink-foreground">{result.confidence} confidence</span><p className="mt-3 text-sm leading-6 text-muted-foreground">{result.summary}</p></div></div>
+    <div className="mt-7 grid grid-cols-[128px_1fr] items-center gap-6"><div className="score-ring" style={{ "--score": `${result.score * 3.6}deg` } as CSSProperties}><div><strong>{result.score}%</strong><span>AI likelihood</span></div></div><div><span className="inline-flex bg-ink px-2 py-1 font-mono text-xs text-ink-foreground">{result.confidence} confidence</span><p className="mt-3 text-sm leading-6 text-muted-foreground">{result.summary}</p></div></div>
     <div className="mt-7 space-y-2"><Distribution label="AI-generated" value={result.score} tone="signal" /><Distribution label="Human-made" value={human} tone="ink" /></div>
     <div className="mt-8 border-t border-border pt-6"><h4 className="text-sm font-semibold uppercase">Strongest signals</h4><div className="mt-4 space-y-5">{result.signals.map((signal) => <div key={signal.label}><div className="mb-2 flex items-center justify-between gap-4 text-sm"><span className="font-semibold">{signal.label}</span><span className="font-mono text-xs">{signal.weight}%</span></div><div className="h-1.5 bg-border"><div className="h-full bg-signal transition-all duration-700" style={{ width: `${signal.weight}%` }} /></div><p className="mt-2 text-xs leading-5 text-muted-foreground">{signal.detail}</p></div>)}</div></div>
     {mode === "text" && result.segments.length > 0 && <div className="mt-8 border-t border-border pt-6"><h4 className="text-sm font-semibold uppercase">Sentence map</h4><div className="mt-4 max-h-56 overflow-auto bg-background p-4 text-sm leading-7">{result.segments.map((segment, index) => <span key={`${index}-${segment.text.slice(0, 12)}`} title={`${segment.score}% AI likelihood`} className={segment.score >= 70 ? "bg-signal/50" : segment.score >= 40 ? "bg-warning/40" : "bg-positive/20"}>{segment.text} </span>)}</div></div>}
